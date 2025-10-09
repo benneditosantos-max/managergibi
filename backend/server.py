@@ -286,11 +286,11 @@ async def get_dashboard_stats(current_user: User = Depends(get_current_user)):
     # Get financial data
     all_jobs = await db.jobs.find({}, {"_id": 0}).to_list(None)
     
-    total_revenue = sum(job.get('price_charged', 0) for job in all_jobs)
+    total_revenue = sum(job.get('price_charged', 0) or 0 for job in all_jobs)
     total_costs = sum(
-        (job.get('helper_payment', 0) + 
-         job.get('operational_cost', 0) + 
-         job.get('subcontract_cost', 0)) 
+        ((job.get('helper_payment') or 0) + 
+         (job.get('operational_cost') or 0) + 
+         (job.get('subcontract_cost') or 0)) 
         for job in all_jobs
     )
     net_profit = total_revenue - total_costs
