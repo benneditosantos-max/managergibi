@@ -370,10 +370,10 @@ async def update_job(job_id: str, job_update: JobUpdate, current_user: User = De
     
     # Calculate net profit if costs are updated
     if any(key in update_data for key in ['helper_payment', 'operational_cost', 'subcontract_cost']):
-        price_charged = job.get('price_charged', 0)
-        helper_payment = update_data.get('helper_payment', job.get('helper_payment', 0))
-        operational_cost = update_data.get('operational_cost', job.get('operational_cost', 0))
-        subcontract_cost = update_data.get('subcontract_cost', job.get('subcontract_cost', 0))
+        price_charged = job.get('price_charged', 0) or 0
+        helper_payment = update_data.get('helper_payment', job.get('helper_payment') or 0) or 0
+        operational_cost = update_data.get('operational_cost', job.get('operational_cost') or 0) or 0
+        subcontract_cost = update_data.get('subcontract_cost', job.get('subcontract_cost') or 0) or 0
         
         update_data['net_profit'] = price_charged - (helper_payment + operational_cost + subcontract_cost)
     
