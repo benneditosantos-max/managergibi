@@ -572,9 +572,8 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        <div>
-          {/* Quick Actions & Notifications */}
-          <div className="space-y-6">
+        {/* Quick Actions & Notifications */}
+        <div className="space-y-6">
           {/* Quick Actions */}
           <Card data-testid="quick-actions">
             <CardHeader>
