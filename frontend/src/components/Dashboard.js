@@ -699,7 +699,6 @@ const Dashboard = () => {
         </div>
         </React.Fragment>
       )}
-      </div>
     </div>
   );
 };
