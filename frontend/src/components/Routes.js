@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
   MapPin, 
-  Route as RouteIcon, 
+  Route, 
   Clock, 
   Fuel, 
   Navigation,
