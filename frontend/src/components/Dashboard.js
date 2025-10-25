@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../App';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import DashboardCharts from './DashboardCharts';
 import { 
   Calendar, 
@@ -14,7 +15,8 @@ import {
   AlertCircle,
   CheckCircle,
   BarChart3,
-  LineChart
+  LineChart,
+  CalendarDays
 } from 'lucide-react';
 import axios from 'axios';
 
