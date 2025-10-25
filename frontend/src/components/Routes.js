@@ -243,7 +243,7 @@ const Routes = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                      <RouteIcon className="w-6 h-6 text-white" />
+                      <Route className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">
