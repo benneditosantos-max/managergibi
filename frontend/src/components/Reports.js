@@ -134,6 +134,21 @@ const Reports = () => {
     return type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  const handleExport = async () => {
+    try {
+      const response = await axios.get(`${API}/reports/export?format=csv&time_range=${timeRange}`);
+      
+      // Mock download functionality
+      toast.success(`Report exported: ${response.data.filename}`);
+      
+      // In a real implementation, you would trigger the actual download here
+      console.log('Export data:', response.data);
+    } catch (error) {
+      console.error('Error exporting report:', error);
+      toast.error('Failed to export report');
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-8">
