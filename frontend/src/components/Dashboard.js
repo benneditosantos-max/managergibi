@@ -515,7 +515,8 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
+          </div>
+        </React.Fragment>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Jobs */}
