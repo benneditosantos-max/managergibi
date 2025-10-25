@@ -140,6 +140,57 @@ class JobUpdate(BaseModel):
     subcontract_cost: Optional[float] = None
     notes: Optional[str] = None
 
+# New models for subcontracting system
+class Subcontractor(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    company_name: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    commission_rate: float = Field(ge=0, le=100)  # Percentage (0-100)
+    specialties: Optional[List[str]] = None
+    active: bool = Field(default=True)
+    total_jobs: int = Field(default=0)
+    total_revenue: float = Field(default=0.0)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class SubcontractorCreate(BaseModel):
+    name: str
+    company_name: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    commission_rate: float = Field(ge=0, le=100)
+    specialties: Optional[List[str]] = None
+
+# Route optimization model (mocked)
+class Route(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: datetime
+    helper_id: str
+    jobs: List[str]  # Job IDs
+    total_distance_miles: float
+    total_travel_time_minutes: int
+    fuel_cost: float
+    optimized: bool = Field(default=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Notification model (mocked)
+class Notification(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    title: str
+    message: str
+    type: str  # 'job_reminder', 'job_complete', 'payment_due', etc.
+    read: bool = Field(default=False)
+    sent_via: str = Field(default="in_app")  # 'in_app', 'email', 'sms'
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 class DashboardStats(BaseModel):
     total_jobs_today: int
     total_jobs_week: int
