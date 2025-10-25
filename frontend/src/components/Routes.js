@@ -229,7 +229,7 @@ const Routes = () => {
         ) : routes.length === 0 ? (
           <Card>
             <CardContent className="p-12 text-center">
-              <RouteIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <Route className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No routes for this date</h3>
               <p className="text-gray-500">
                 Select a different date or add jobs to see optimized routes
