@@ -523,6 +523,37 @@ h3 {
   }
 }
 
+/* Dialog and Form Fixes */
+[role="dialog"] {
+  background-color: white !important;
+  color: #3C2A53 !important;
+}
+
+[role="dialog"] input,
+[role="dialog"] select,
+[role="dialog"] textarea {
+  background-color: white !important;
+  border: 1px solid #d1d5db !important;
+  color: #374151 !important;
+}
+
+[role="dialog"] input:focus,
+[role="dialog"] select:focus,
+[role="dialog"] textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(160, 132, 202, 0.1) !important;
+}
+
+[role="dialog"] label {
+  color: #374151 !important;
+  font-weight: 500 !important;
+}
+
+/* Dialog overlay fix */
+[data-radix-popper-content-wrapper] {
+  z-index: 100 !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
