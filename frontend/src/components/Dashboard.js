@@ -272,7 +272,7 @@ const Dashboard = () => {
         </Button>
       </div>
 
-      {showCharts ? (
+      {showCharts ?
         <div className="space-y-8">
           {/* Revenue Growth Chart */}
           <Card data-testid="revenue-growth-chart">
