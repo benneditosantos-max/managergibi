@@ -273,7 +273,8 @@ const Dashboard = () => {
       </div>
 
       <div>Test content</div>
-          {/* Revenue Growth Chart */}
+          {/* Revenue Growth Chart 
+          Commented out for testing */}
           <Card data-testid="revenue-growth-chart">
             <CardHeader>
               <div className="flex items-center justify-between">
