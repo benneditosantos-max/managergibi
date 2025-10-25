@@ -176,7 +176,11 @@ const Reports = () => {
             <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           </div>
 
-          <Button variant="outline" data-testid="export-button">
+          <Button 
+            variant="outline" 
+            onClick={handleExport}
+            data-testid="export-button"
+          >
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
