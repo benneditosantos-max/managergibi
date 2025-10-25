@@ -25,34 +25,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showCharts, setShowCharts] = useState(false);
 
-  // Mock data para gráficos de crescimento
-  const revenueGrowthData = [
-    { month: 'Jan', revenue: 3500, jobs: 15, costs: 2100 },
-    { month: 'Feb', revenue: 4200, jobs: 18, costs: 2400 },
-    { month: 'Mar', revenue: 3800, jobs: 16, costs: 2200 },
-    { month: 'Apr', revenue: 5100, jobs: 22, costs: 2800 },
-    { month: 'May', revenue: 4800, jobs: 20, costs: 2600 },
-    { month: 'Jun', revenue: 6200, jobs: 26, costs: 3200 },
-    { month: 'Jul', revenue: 5900, jobs: 24, costs: 3000 },
-    { month: 'Aug', revenue: 7500, jobs: 30, costs: 3600 },
-    { month: 'Sep', revenue: 8200, jobs: 32, costs: 3800 },
-    { month: 'Oct', revenue: 9100, jobs: 36, costs: 4000 },
-  ];
-
-  const jobTypeData = [
-    { name: 'Regular Cleaning', value: 45, color: '#A084CA' },
-    { name: 'Deep Cleaning', value: 25, color: '#D6C7E1' },
-    { name: 'Office Cleaning', value: 20, color: '#8B5CF6' },
-    { name: 'Airbnb', value: 10, color: '#C084FC' },
-  ];
-
-  const helperPerformanceData = [
-    { name: 'Maria Santos', jobs: 28, rating: 4.9, earnings: 2100 },
-    { name: 'John Smith', jobs: 22, rating: 4.7, earnings: 1650 },
-    { name: 'Ana Silva', jobs: 20, rating: 4.8, earnings: 1500 },
-    { name: 'Carlos Lima', jobs: 18, rating: 4.6, earnings: 1350 },
-  ];
-
   useEffect(() => {
     fetchDashboardData();
   }, []);
