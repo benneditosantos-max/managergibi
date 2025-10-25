@@ -26,6 +26,8 @@ const Dashboard = () => {
   const [recentJobs, setRecentJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCharts, setShowCharts] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [allJobs, setAllJobs] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
