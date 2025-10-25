@@ -534,7 +534,7 @@ const Schedule = () => {
                         {job.status === 'in_progress' && (
                           <Button
                             size="sm"
-                            onClick={() => handleStatusUpdate(job.id, 'completed')}
+                            onClick={() => handleCompleteJob(job)}
                             className="bg-green-500 hover:bg-green-600 text-white"
                             data-testid={`complete-job-${job.id}`}
                           >
