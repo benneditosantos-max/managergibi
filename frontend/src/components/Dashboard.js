@@ -42,6 +42,8 @@ const Dashboard = () => {
       ]);
       
       setStats(statsResponse.data);
+      setAllJobs(jobsResponse.data);
+      
       // Get recent jobs (last 10)
       const sortedJobs = jobsResponse.data
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
