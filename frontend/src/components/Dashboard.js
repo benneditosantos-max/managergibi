@@ -273,7 +273,6 @@ const Dashboard = () => {
       </div>
 
       <div>Test content</div>
-        <div className="space-y-8">
           {/* Revenue Growth Chart */}
           <Card data-testid="revenue-growth-chart">
             <CardHeader>
