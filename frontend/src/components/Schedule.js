@@ -139,6 +139,25 @@ const Schedule = () => {
     }
   };
 
+  const handleCompleteJob = async (job) => {
+    const actualDuration = prompt(`How many hours did this job actually take? (Original estimate: ${job.duration_hours}h)`, job.duration_hours);
+    
+    if (actualDuration && !isNaN(actualDuration)) {
+      try {
+        const response = await axios.put(`${API}/jobs/${job.id}/complete`, {
+          actual_duration: parseFloat(actualDuration),
+          notes: `Job completed. Actual duration: ${actualDuration}h`
+        });
+        
+        toast.success(`Job completed! Net profit: ${response.data.net_profit ? '$' + response.data.net_profit.toFixed(2) : 'N/A'}`);
+        fetchData();
+      } catch (error) {
+        console.error('Error completing job:', error);
+        toast.error('Failed to complete job');
+      }
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       client_id: '',
