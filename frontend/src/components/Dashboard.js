@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../App';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import DashboardCharts from './DashboardCharts';
 import { 
   Calendar, 
   DollarSign, 
@@ -15,23 +16,6 @@ import {
   BarChart3,
   LineChart
 } from 'lucide-react';
-import {
-  LineChart as RechartsLineChart,
-  AreaChart,
-  BarChart,
-  Area,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
-} from 'recharts';
 import axios from 'axios';
 
 const Dashboard = () => {
