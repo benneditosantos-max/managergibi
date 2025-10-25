@@ -696,7 +696,8 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
+          </div>
+        </React.Fragment>
       )}
       </div>
     </div>
