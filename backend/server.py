@@ -479,6 +479,252 @@ async def root():
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     return current_user
 
+# Subcontractor routes
+@api_router.post("/subcontractors", response_model=Subcontractor)
+async def create_subcontractor(sub_data: SubcontractorCreate, current_user: User = Depends(get_current_user)):
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    sub_obj = Subcontractor(**sub_data.model_dump())
+    doc = prepare_for_mongo(sub_obj.model_dump())
+    
+    await db.subcontractors.insert_one(doc)
+    return sub_obj
+
+@api_router.get("/subcontractors", response_model=List[Subcontractor])
+async def get_subcontractors(current_user: User = Depends(get_current_user)):
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    subs = await db.subcontractors.find({}, {"_id": 0}).to_list(None)
+    
+    for sub in subs:
+        sub = parse_from_mongo(sub)
+    
+    return [Subcontractor(**sub) for sub in subs]
+
+# Route optimization (mocked)
+@api_router.get("/routes/optimize/{date}")
+async def optimize_routes(date: str, current_user: User = Depends(get_current_user)):
+    """Mock route optimization for a specific date"""
+    try:
+        target_date = datetime.fromisoformat(date).date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format")
+    
+    # Get jobs for the date
+    jobs = await db.jobs.find({
+        "date": {
+            "$gte": f"{target_date}T00:00:00",
+            "$lt": f"{target_date}T23:59:59"
+        }
+    }, {"_id": 0}).to_list(None)
+    
+    # Mock optimization logic
+    routes = []
+    helpers_with_jobs = {}
+    
+    for job in jobs:
+        helper_id = job.get('helper_id')
+        if helper_id:
+            if helper_id not in helpers_with_jobs:
+                helpers_with_jobs[helper_id] = []
+            helpers_with_jobs[helper_id].append(job)
+    
+    for helper_id, helper_jobs in helpers_with_jobs.items():
+        # Mock calculations
+        distance = len(helper_jobs) * 8.5  # Average 8.5 miles between jobs
+        travel_time = len(helper_jobs) * 25  # Average 25 minutes between jobs
+        fuel_cost = distance * 0.35  # $0.35 per mile
+        
+        route = Route(
+            date=datetime.fromisoformat(date),
+            helper_id=helper_id,
+            jobs=[job['id'] for job in helper_jobs],
+            total_distance_miles=distance,
+            total_travel_time_minutes=travel_time,
+            fuel_cost=fuel_cost
+        )
+        routes.append(route)
+    
+    return routes
+
+# Cost calculation helper
+@api_router.post("/jobs/{job_id}/calculate-costs")
+async def calculate_job_costs(job_id: str, current_user: User = Depends(get_current_user)):
+    job = await db.jobs.find_one({"id": job_id}, {"_id": 0})
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    costs = {}
+    
+    # Helper payment calculation
+    if job.get('helper_id'):
+        helper = await db.users.find_one({"id": job['helper_id']}, {"_id": 0})
+        if helper and helper.get('hourly_rate'):
+            duration = job.get('actual_duration', job.get('duration_hours', 0))
+            costs['helper_payment'] = duration * helper['hourly_rate']
+    
+    # Operational costs (mocked calculation)
+    duration = job.get('actual_duration', job.get('duration_hours', 0))
+    costs['operational_cost'] = {
+        'supplies': duration * 8,  # $8 per hour for supplies
+        'transportation': 15,       # Fixed $15 for gas/travel
+        'equipment_wear': duration * 2,  # $2 per hour equipment wear
+        'total': (duration * 8) + 15 + (duration * 2)
+    }
+    
+    # Subcontractor cost (if applicable)
+    if job.get('subcontractor_id'):
+        subcontractor = await db.subcontractors.find_one({"id": job['subcontractor_id']}, {"_id": 0})
+        if subcontractor:
+            commission_rate = subcontractor.get('commission_rate', 0)
+            costs['subcontract_cost'] = job.get('price_charged', 0) * (commission_rate / 100)
+    
+    return costs
+
+# Notification system (mocked)
+@api_router.get("/notifications")
+async def get_notifications(current_user: User = Depends(get_current_user)):
+    """Get notifications for current user (mocked)"""
+    
+    # Mock notifications based on user role and recent activity
+    mock_notifications = []
+    
+    if current_user.role == UserRole.ADMIN:
+        mock_notifications = [
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Job Starting Soon",
+                "message": "Deep cleaning at Johnson Family starts in 1 hour",
+                "type": "job_reminder",
+                "read": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Payment Due",
+                "message": "Helper payment due for Maria Santos: $75.00",
+                "type": "payment_due", 
+                "read": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Weekly Report",
+                "message": "Your weekly business report is ready",
+                "type": "report_ready",
+                "read": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+    elif current_user.role == UserRole.HELPER:
+        mock_notifications = [
+            {
+                "id": str(uuid.uuid4()),
+                "title": "New Job Assigned",
+                "message": "Office cleaning at Downtown Complex tomorrow 6PM",
+                "type": "job_assigned",
+                "read": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "title": "Route Updated",
+                "message": "Your route for tomorrow has been optimized - check schedule",
+                "type": "route_updated",
+                "read": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+    
+    return mock_notifications
+
+@api_router.post("/notifications/{notification_id}/mark-read")
+async def mark_notification_read(notification_id: str, current_user: User = Depends(get_current_user)):
+    """Mark notification as read (mocked)"""
+    return {"message": "Notification marked as read", "notification_id": notification_id}
+
+# Enhanced job updates with automatic cost calculations
+@api_router.put("/jobs/{job_id}/complete")
+async def complete_job_with_costs(
+    job_id: str, 
+    actual_duration: float,
+    notes: Optional[str] = None,
+    current_user: User = Depends(get_current_user)
+):
+    """Complete job and automatically calculate all costs"""
+    
+    job = await db.jobs.find_one({"id": job_id}, {"_id": 0})
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    # Check permissions
+    if current_user.role == UserRole.HELPER and job.get('helper_id') != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Calculate costs automatically
+    costs = await calculate_job_costs(job_id, current_user)
+    
+    update_data = {
+        'status': 'completed',
+        'actual_duration': actual_duration,
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    if notes:
+        update_data['notes'] = notes
+    
+    # Add calculated costs
+    if 'helper_payment' in costs:
+        update_data['helper_payment'] = costs['helper_payment']
+    
+    if 'operational_cost' in costs:
+        update_data['operational_cost'] = costs['operational_cost']['total']
+    
+    if 'subcontract_cost' in costs:
+        update_data['subcontract_cost'] = costs['subcontract_cost']
+    
+    # Calculate net profit
+    price_charged = job.get('price_charged', 0)
+    total_costs = (
+        update_data.get('helper_payment', 0) +
+        update_data.get('operational_cost', 0) + 
+        update_data.get('subcontract_cost', 0)
+    )
+    update_data['net_profit'] = price_charged - total_costs
+    
+    await db.jobs.update_one({"id": job_id}, {"$set": update_data})
+    
+    return {
+        "message": "Job completed successfully",
+        "costs_breakdown": costs,
+        "net_profit": update_data['net_profit']
+    }
+
+# Export functionality
+@api_router.get("/reports/export")
+async def export_reports(
+    format: str = "csv",
+    time_range: str = "month", 
+    current_user: User = Depends(get_current_user)
+):
+    """Export business reports in CSV/PDF format (mocked)"""
+    
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Mock export data
+    export_data = {
+        "filename": f"gabi_cleaning_report_{time_range}_{datetime.now().strftime('%Y%m%d')}.{format}",
+        "download_url": f"/downloads/reports/gabi_cleaning_report_{time_range}_{datetime.now().strftime('%Y%m%d')}.{format}",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "records_count": 25,
+        "format": format.upper()
+    }
+    
+    return export_data
+
 # Include the router in the main app
 app.include_router(api_router)
 
