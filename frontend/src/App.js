@@ -155,6 +155,36 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/subcontractors"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Subcontractors />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/routes"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Routes />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Notifications />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <Toaster />
         </div>
