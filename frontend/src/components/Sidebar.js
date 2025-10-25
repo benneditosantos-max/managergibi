@@ -35,6 +35,12 @@ const Sidebar = ({ user }) => {
       roles: ['admin', 'helper']
     },
     {
+      name: 'Routes',
+      icon: Route,
+      path: '/routes',
+      roles: ['admin', 'helper']
+    },
+    {
       name: 'Clients',
       icon: Users,
       path: '/clients',
@@ -47,10 +53,22 @@ const Sidebar = ({ user }) => {
       roles: ['admin']
     },
     {
+      name: 'Subcontractors',
+      icon: Building2,
+      path: '/subcontractors',
+      roles: ['admin']
+    },
+    {
       name: 'Reports',
       icon: FileBarChart,
       path: '/reports',
       roles: ['admin']
+    },
+    {
+      name: 'Notifications',
+      icon: Bell,
+      path: '/notifications',
+      roles: ['admin', 'helper']
     }
   ];
 
