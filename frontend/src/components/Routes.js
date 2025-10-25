@@ -325,7 +325,7 @@ const Routes = () => {
                     className="bg-primary hover:bg-primary/90"
                     data-testid={`start-route-${index}`}
                   >
-                    <RouteIcon className="w-4 h-4 mr-2" />
+                    <Route className="w-4 h-4 mr-2" />
                     Start Route
                   </Button>
                 </div>
