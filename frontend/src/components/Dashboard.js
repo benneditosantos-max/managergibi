@@ -273,8 +273,9 @@ const Dashboard = () => {
       </div>
 
       {showCharts ? (
-        // Growth Charts Section
-        <div className="space-y-8">
+        <React.Fragment>
+          {/* Growth Charts Section */}
+          <div className="space-y-8">
           {/* Revenue Growth Chart */}
           <Card data-testid="revenue-growth-chart">
             <CardHeader>
