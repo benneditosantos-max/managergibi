@@ -19,8 +19,23 @@ import {
 } from 'lucide-react';
 
 const Sidebar = ({ user }) => {
-  const { logout } = useContext(AuthContext);
+  const { logout, API } = useContext(AuthContext);
   const location = useLocation();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(`${API}/notifications`);
+      const unread = response.data.filter(n => !n.read).length;
+      setUnreadCount(unread);
+    } catch (error) {
+      // Silently fail - notifications are not critical
+    }
+  };
 
   const menuItems = [
     {
