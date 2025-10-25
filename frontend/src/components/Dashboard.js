@@ -87,6 +87,27 @@ const Dashboard = () => {
     }
   };
 
+  // Função para filtrar jobs por data selecionada
+  const getJobsForDate = (date) => {
+    const dateStr = date.toISOString().split('T')[0];
+    return allJobs.filter(job => {
+      const jobDate = new Date(job.date).toISOString().split('T')[0];
+      return jobDate === dateStr;
+    });
+  };
+
+  // Função para verificar se uma data tem jobs
+  const hasJobsOnDate = (date) => {
+    const dateStr = date.toISOString().split('T')[0];
+    return allJobs.some(job => {
+      const jobDate = new Date(job.date).toISOString().split('T')[0];
+      return jobDate === dateStr;
+    });
+  };
+
+  // Jobs da data selecionada
+  const selectedDateJobs = getJobsForDate(selectedDate);
+
   if (loading) {
     return (
       <div className="p-8">
