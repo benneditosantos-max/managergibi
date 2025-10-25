@@ -12,6 +12,9 @@ import Schedule from '@/components/Schedule';
 import Clients from '@/components/Clients';
 import Helpers from '@/components/Helpers';
 import Reports from '@/components/Reports';
+import Subcontractors from '@/components/Subcontractors';
+import Routes from '@/components/Routes';
+import Notifications from '@/components/Notifications';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
