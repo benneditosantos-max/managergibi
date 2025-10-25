@@ -513,7 +513,7 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          </div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Jobs */}
