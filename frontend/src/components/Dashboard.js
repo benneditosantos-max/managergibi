@@ -143,7 +143,8 @@ const Dashboard = () => {
     );
   }
 
-  return <div className="p-8 bg-gray-50 min-h-screen" data-testid="dashboard">
+  return (
+    <div className="p-8 bg-gray-50 min-h-screen" data-testid="dashboard">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
