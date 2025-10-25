@@ -11,7 +11,10 @@ import {
   Sparkles, 
   LogOut,
   Settings,
-  Bell
+  Bell,
+  Building2,
+  Route,
+  Navigation
 } from 'lucide-react';
 
 const Sidebar = ({ user }) => {
