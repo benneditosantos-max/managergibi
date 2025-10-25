@@ -259,60 +259,127 @@ const Dashboard = () => {
         <DashboardCharts />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Jobs */}
+          {/* Calendar & Jobs */}
           <div className="lg:col-span-2">
-            <Card data-testid="recent-jobs">
+            <Card data-testid="calendar-jobs">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-gray-900">Recent Jobs</h3>
-                  <span className="text-sm text-gray-500">{recentJobs.length} jobs</span>
+                  <div className="flex items-center space-x-2">
+                    <CalendarDays className="w-5 h-5 text-primary" />
+                    <h3 className="text-xl font-semibold text-gray-900">Schedule Calendar</h3>
+                  </div>
+                  <span className="text-sm text-gray-500">
+                    {selectedDateJobs.length} jobs on {selectedDate.toLocaleDateString()}
+                  </span>
                 </div>
               </CardHeader>
-            <CardContent>
-              {recentJobs.length === 0 ? (
-                <div className="text-center py-8">
-                  <Sparkles className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No jobs scheduled yet</p>
-                  <p className="text-sm text-gray-400">Create your first cleaning job to get started</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {recentJobs.map((job) => (
-                    <div 
-                      key={job.id} 
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                      data-testid={`job-${job.id}`}
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                          <Clock className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">{job.client_name}</p>
-                          <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <MapPin className="w-3 h-3" />
-                            <span>{job.address}</span>
-                          </div>
-                          <p className="text-xs text-gray-400">
-                            {formatDate(job.date)} • {job.duration_hours}h • {job.job_type}
-                          </p>
-                        </div>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Calendar */}
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg">
+                    <CalendarComponent
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      className="rounded-md border-0"
+                      modifiers={{
+                        hasJobs: (date) => hasJobsOnDate(date)
+                      }}
+                      modifiersStyles={{
+                        hasJobs: {
+                          backgroundColor: '#A084CA',
+                          color: 'white',
+                          borderRadius: '50%'
+                        }
+                      }}
+                      data-testid="dashboard-calendar"
+                    />
+                    <div className="mt-4 flex items-center justify-center space-x-4 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-primary rounded-full"></div>
+                        <span className="text-gray-600">Has Jobs</span>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-gray-900">
-                          {formatCurrency(job.price_charged)}
-                        </p>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(job.status)}`}>
-                          {job.status.replace('_', ' ')}
-                        </span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 border-2 border-gray-300 rounded-full"></div>
+                        <span className="text-gray-600">Available</span>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Jobs for Selected Date */}
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-gray-900 mb-3">
+                      Jobs for {selectedDate.toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    </h4>
+                    
+                    {selectedDateJobs.length === 0 ? (
+                      <div className="text-center py-8 bg-gray-50 rounded-lg">
+                        <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                        <p className="text-gray-500">No jobs scheduled</p>
+                        <p className="text-sm text-gray-400">Select a different date or add a new job</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 max-h-96 overflow-y-auto">
+                        {selectedDateJobs.map((job) => (
+                          <div 
+                            key={job.id} 
+                            className="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                            data-testid={`calendar-job-${job.id}`}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <h5 className="font-medium text-gray-900">{job.client_name}</h5>
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(job.status)}`}>
+                                    {job.status.replace('_', ' ')}
+                                  </span>
+                                </div>
+                                
+                                <div className="space-y-1 text-sm text-gray-600">
+                                  <div className="flex items-center space-x-2">
+                                    <Clock className="w-3 h-3" />
+                                    <span>{formatDate(job.date)} • {job.duration_hours}h</span>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <MapPin className="w-3 h-3" />
+                                    <span className="truncate">{job.address}</span>
+                                  </div>
+                                </div>
+                                
+                                {job.helper_name && (
+                                  <div className="flex items-center space-x-2 mt-2">
+                                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                      <span className="text-white text-xs font-medium">
+                                        {job.helper_name.charAt(0)}
+                                      </span>
+                                    </div>
+                                    <span className="text-sm text-gray-600">{job.helper_name}</span>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div className="text-right ml-4">
+                                <p className="font-semibold text-gray-900">
+                                  {formatCurrency(job.price_charged)}
+                                </p>
+                                <p className="text-xs text-gray-500 capitalize">
+                                  {job.job_type.replace('_', ' ')}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
 
         {/* Quick Actions & Notifications */}
         <div className="space-y-6">
