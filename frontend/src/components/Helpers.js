@@ -46,6 +46,51 @@ const Helpers = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const payload = {
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        role: 'helper',
+        phone: formData.phone || null,
+        hourly_rate: formData.hourly_rate ? parseFloat(formData.hourly_rate) : null,
+        availability: formData.availability || null
+      };
+
+      await axios.post(`${API}/auth/register`, payload);
+      toast.success('Helper added successfully!');
+      
+      resetForm();
+      setIsDialogOpen(false);
+      fetchData();
+    } catch (error) {
+      console.error('Error adding helper:', error);
+      toast.error(error.response?.data?.detail || 'Failed to add helper');
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      email: '',
+      password: '',
+      name: '',
+      phone: '',
+      hourly_rate: '',
+      availability: ''
+    });
+  };
+
   const getHelperStats = (helperId) => {
     const helperJobs = jobs.filter(job => job.helper_id === helperId);
     const completedJobs = helperJobs.filter(job => job.status === 'completed');
