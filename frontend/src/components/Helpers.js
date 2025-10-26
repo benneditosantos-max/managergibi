@@ -15,6 +15,15 @@ const Helpers = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    phone: '',
+    hourly_rate: '',
+    availability: ''
+  });
 
   useEffect(() => {
     fetchData();
