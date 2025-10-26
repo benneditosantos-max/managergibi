@@ -295,27 +295,7 @@ const Schedule = () => {
             {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
           </h2>
           
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600">Visualização:</span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className={viewMode === 'list' ? 'bg-primary/10 text-primary border-primary' : ''}
-            >
-              <List className="w-4 h-4 mr-1" />
-              Lista
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setViewMode('calendar')}
-              className={viewMode === 'calendar' ? 'bg-primary/10 text-primary border-primary' : ''}
-            >
-              <CalendarDays className="w-4 h-4 mr-1" />
-              Calendário
-            </Button>
-          </div>
+          <div className="w-48"></div>
         </div>
 
         {/* Calendar Grid */}
