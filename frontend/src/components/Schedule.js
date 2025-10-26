@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { 
-  Calendar,
+  Calendar as CalendarIcon,
   Clock,
   MapPin,
   Plus,
@@ -16,9 +16,27 @@ import {
   User,
   DollarSign,
   Filter,
-  Search
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  List,
+  CalendarDays
 } from 'lucide-react';
 import axios from 'axios';
+import { 
+  startOfMonth, 
+  endOfMonth, 
+  eachDayOfInterval, 
+  format, 
+  isSameMonth, 
+  isSameDay,
+  addMonths,
+  subMonths,
+  startOfWeek,
+  endOfWeek,
+  isToday
+} from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const Schedule = () => {
   const { user, API } = useContext(AuthContext);
