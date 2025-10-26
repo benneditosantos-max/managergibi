@@ -48,6 +48,8 @@ const Schedule = () => {
   const [editingJob, setEditingJob] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [formData, setFormData] = useState({
     client_id: '',
     date: '',
