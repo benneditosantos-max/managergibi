@@ -139,11 +139,145 @@ const Helpers = () => {
   return (
     <div className="p-8 bg-gray-50 min-h-screen" data-testid="helpers-page">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Helper Management</h1>
-        <p className="text-gray-600 mt-1">
-          Track your team's performance and manage helper assignments
-        </p>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Helper Management</h1>
+          <p className="text-gray-600 mt-1">
+            Track your team's performance and manage helper assignments
+          </p>
+        </div>
+
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              onClick={() => resetForm()}
+              className="bg-primary hover:bg-primary/90"
+              data-testid="add-helper-button"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Helper
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Add New Helper</DialogTitle>
+            </DialogHeader>
+            
+            <form onSubmit={handleSubmit} className="space-y-4" data-testid="helper-form">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="name">Full Name *</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="John Doe"
+                    required
+                    data-testid="name-input"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="email">Email *</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="john@example.com"
+                    required
+                    data-testid="email-input"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="password">Password *</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="••••••••"
+                    required
+                    data-testid="password-input"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="+1 (555) 000-0000"
+                    data-testid="phone-input"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="hourly_rate">Hourly Rate ($)</Label>
+                  <Input
+                    id="hourly_rate"
+                    name="hourly_rate"
+                    type="number"
+                    step="0.01"
+                    value={formData.hourly_rate}
+                    onChange={handleInputChange}
+                    placeholder="25.00"
+                    data-testid="hourly-rate-input"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="availability">Availability</Label>
+                  <Input
+                    id="availability"
+                    name="availability"
+                    type="text"
+                    value={formData.availability}
+                    onChange={handleInputChange}
+                    placeholder="Mon-Fri, 9AM-5PM"
+                    data-testid="availability-input"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                  data-testid="cancel-button"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-primary hover:bg-primary/90"
+                  data-testid="save-helper-button"
+                >
+                  Add Helper
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Search */}
