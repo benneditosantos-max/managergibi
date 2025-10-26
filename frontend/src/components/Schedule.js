@@ -231,6 +231,158 @@ const Schedule = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Calendar functions
+  const goToToday = () => {
+    setCurrentMonth(new Date());
+  };
+
+  const goToPreviousMonth = () => {
+    setCurrentMonth(subMonths(currentMonth, 1));
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth(addMonths(currentMonth, 1));
+  };
+
+  const getJobsForDay = (day) => {
+    return filteredJobs.filter(job => {
+      const jobDate = new Date(job.date);
+      return isSameDay(jobDate, day);
+    });
+  };
+
+  const renderCalendarView = () => {
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(currentMonth);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
+    
+    const days = eachDayOfInterval({ start: startDate, end: endDate });
+    const weekDays = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        {/* Calendar Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToToday}
+              className="text-primary border-primary hover:bg-primary/10"
+            >
+              Hoje
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToPreviousMonth}
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Anterior
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToNextMonth}
+            >
+              Próximo
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+          
+          <h2 className="text-2xl font-bold text-gray-900">
+            {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
+          </h2>
+          
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-600">Visualização:</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className={viewMode === 'list' ? 'bg-primary/10 text-primary border-primary' : ''}
+            >
+              <List className="w-4 h-4 mr-1" />
+              Lista
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setViewMode('calendar')}
+              className={viewMode === 'calendar' ? 'bg-primary/10 text-primary border-primary' : ''}
+            >
+              <CalendarDays className="w-4 h-4 mr-1" />
+              Calendário
+            </Button>
+          </div>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="p-4">
+          {/* Week day headers */}
+          <div className="grid grid-cols-7 gap-2 mb-2">
+            {weekDays.map((day) => (
+              <div key={day} className="text-center font-semibold text-sm text-primary py-2">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar days */}
+          <div className="grid grid-cols-7 gap-2">
+            {days.map((day, idx) => {
+              const dayJobs = getJobsForDay(day);
+              const isCurrentMonth = isSameMonth(day, currentMonth);
+              const isCurrentDay = isToday(day);
+
+              return (
+                <div
+                  key={idx}
+                  className={`
+                    min-h-[100px] p-2 border rounded-lg
+                    ${!isCurrentMonth ? 'bg-gray-50 text-gray-400' : 'bg-white'}
+                    ${isCurrentDay ? 'border-primary border-2 bg-primary/5' : 'border-gray-200'}
+                    hover:shadow-md transition-shadow cursor-pointer
+                  `}
+                >
+                  <div className="text-sm font-medium mb-1">
+                    {format(day, 'd')}
+                  </div>
+                  
+                  {dayJobs.length > 0 && isCurrentMonth && (
+                    <div className="space-y-1">
+                      {dayJobs.slice(0, 3).map((job) => (
+                        <div
+                          key={job.id}
+                          className={`
+                            text-xs p-1 rounded truncate
+                            ${job.status === 'completed' ? 'bg-green-100 text-green-800' :
+                              job.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                              job.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                              'bg-red-100 text-red-800'}
+                          `}
+                          title={`${job.client_name} - ${format(new Date(job.date), 'HH:mm')}`}
+                        >
+                          {format(new Date(job.date), 'HH:mm')} {job.client_name}
+                        </div>
+                      ))}
+                      {dayJobs.length > 3 && (
+                        <div className="text-xs text-gray-500 text-center">
+                          +{dayJobs.length - 3} mais
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="p-8">
