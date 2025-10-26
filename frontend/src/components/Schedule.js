@@ -617,134 +617,139 @@ const Schedule = () => {
         </div>
       </div>
 
-      {/* Jobs List */}
-      <div className="space-y-4" data-testid="jobs-list">
-        {filteredJobs.length === 0 ? (
-          <Card>
-            <CardContent className="p-12 text-center">
-              <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No jobs found</h3>
-              <p className="text-gray-500">
-                {user.role === 'admin' 
-                  ? 'Create your first cleaning job to get started' 
-                  : 'No jobs assigned to you yet'}
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          filteredJobs.map((job) => (
-            <Card key={job.id} className="hover:shadow-lg transition-shadow" data-testid={`job-card-${job.id}`}>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-start space-x-4 flex-1">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-primary" />
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {job.client_name}
-                        </h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(job.status)}`}>
-                          {job.status.replace('_', ' ').toUpperCase()}
-                        </span>
+      {/* Calendar or List View */}
+      {viewMode === 'calendar' ? (
+        renderCalendarView()
+      ) : (
+        /* Jobs List */
+        <div className="space-y-4" data-testid="jobs-list">
+          {filteredJobs.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <CalendarIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No jobs found</h3>
+                <p className="text-gray-500">
+                  {user.role === 'admin' 
+                    ? 'Create your first cleaning job to get started' 
+                    : 'No jobs assigned to you yet'}
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            filteredJobs.map((job) => (
+              <Card key={job.id} className="hover:shadow-lg transition-shadow" data-testid={`job-card-${job.id}`}>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-start space-x-4 flex-1">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                        <CalendarIcon className="w-6 h-6 text-primary" />
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
-                        <div className="flex items-center space-x-2">
-                          <MapPin className="w-4 h-4" />
-                          <span>{job.address}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4" />
-                          <span>{formatDateTime(job.date)} • {job.duration_hours}h</span>
-                        </div>
-                        {job.helper_name && (
-                          <div className="flex items-center space-x-2">
-                            <User className="w-4 h-4" />
-                            <span>{job.helper_name}</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center space-x-4 mt-2">
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4 text-green-600" />
-                          <span className="font-semibold text-green-700">
-                            {formatCurrency(job.price_charged)}
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            {job.client_name}
+                          </h3>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(job.status)}`}>
+                            {job.status.replace('_', ' ').toUpperCase()}
                           </span>
                         </div>
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                          {job.job_type.replace('_', ' ').toUpperCase()}
-                        </span>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                          <div className="flex items-center space-x-2">
+                            <MapPin className="w-4 h-4" />
+                            <span>{job.address}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Clock className="w-4 h-4" />
+                            <span>{formatDateTime(job.date)} • {job.duration_hours}h</span>
+                          </div>
+                          {job.helper_name && (
+                            <div className="flex items-center space-x-2">
+                              <User className="w-4 h-4" />
+                              <span>{job.helper_name}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center space-x-4 mt-2">
+                          <div className="flex items-center space-x-2">
+                            <DollarSign className="w-4 h-4 text-green-600" />
+                            <span className="font-semibold text-green-700">
+                              {formatCurrency(job.price_charged)}
+                            </span>
+                          </div>
+                          <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                            {job.job_type.replace('_', ' ').toUpperCase()}
+                          </span>
+                        </div>
+                        
+                        {job.notes && (
+                          <p className="text-sm text-gray-600 mt-2 italic">
+                            "{job.notes}"
+                          </p>
+                        )}
                       </div>
+                    </div>
+                    
+                    <div className="flex flex-col space-y-2">
+                      {/* Status Update Buttons */}
+                      {user.role === 'admin' || (user.role === 'helper' && job.helper_id === user.id) ? (
+                        <div className="flex space-x-2">
+                          {job.status === 'scheduled' && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleStatusUpdate(job.id, 'in_progress')}
+                              className="bg-yellow-500 hover:bg-yellow-600 text-white"
+                              data-testid={`start-job-${job.id}`}
+                            >
+                              Start
+                            </Button>
+                          )}
+                          
+                          {job.status === 'in_progress' && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleCompleteJob(job)}
+                              className="bg-green-500 hover:bg-green-600 text-white"
+                              data-testid={`complete-job-${job.id}`}
+                            >
+                              Complete
+                            </Button>
+                          )}
+                        </div>
+                      ) : null}
                       
-                      {job.notes && (
-                        <p className="text-sm text-gray-600 mt-2 italic">
-                          "{job.notes}"
-                        </p>
+                      {/* Edit Button (Admin only) */}
+                      {user.role === 'admin' && (
+                        <div className="flex space-x-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEdit(job)}
+                            data-testid={`edit-job-${job.id}`}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleStatusUpdate(job.id, 'cancelled')}
+                            className="text-red-600 border-red-200 hover:bg-red-50"
+                            data-testid={`cancel-job-${job.id}`}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       )}
                     </div>
                   </div>
-                  
-                  <div className="flex flex-col space-y-2">
-                    {/* Status Update Buttons */}
-                    {user.role === 'admin' || (user.role === 'helper' && job.helper_id === user.id) ? (
-                      <div className="flex space-x-2">
-                        {job.status === 'scheduled' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleStatusUpdate(job.id, 'in_progress')}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white"
-                            data-testid={`start-job-${job.id}`}
-                          >
-                            Start
-                          </Button>
-                        )}
-                        
-                        {job.status === 'in_progress' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleCompleteJob(job)}
-                            className="bg-green-500 hover:bg-green-600 text-white"
-                            data-testid={`complete-job-${job.id}`}
-                          >
-                            Complete
-                          </Button>
-                        )}
-                      </div>
-                    ) : null}
-                    
-                    {/* Edit Button (Admin only) */}
-                    {user.role === 'admin' && (
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEdit(job)}
-                          data-testid={`edit-job-${job.id}`}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleStatusUpdate(job.id, 'cancelled')}
-                          className="text-red-600 border-red-200 hover:bg-red-50"
-                          data-testid={`cancel-job-${job.id}`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
