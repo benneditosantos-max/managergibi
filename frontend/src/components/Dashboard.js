@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import axios from 'axios';
 
 const Dashboard = () => {
   const { user, API } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [recentJobs, setRecentJobs] = useState([]);
   const [loading, setLoading] = useState(true);
