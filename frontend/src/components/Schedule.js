@@ -615,6 +615,28 @@ const Schedule = () => {
           <Filter className="w-4 h-4" />
           <span>{filteredJobs.length} jobs</span>
         </div>
+
+        {/* View Toggle Buttons */}
+        <div className="flex items-center space-x-2 border-l pl-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode('list')}
+            className={viewMode === 'list' ? 'bg-primary/10 text-primary border-primary' : ''}
+          >
+            <List className="w-4 h-4 mr-1" />
+            Lista
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode('calendar')}
+            className={viewMode === 'calendar' ? 'bg-primary/10 text-primary border-primary' : ''}
+          >
+            <CalendarDays className="w-4 h-4 mr-1" />
+            Calendário
+          </Button>
+        </div>
       </div>
 
       {/* Calendar or List View */}
