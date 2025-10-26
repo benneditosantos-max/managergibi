@@ -402,9 +402,11 @@ const Dashboard = () => {
           <Card data-testid="quick-actions">
             <CardHeader>
               <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+              <p className="text-sm text-gray-500">Access frequently used features</p>
             </CardHeader>
             <CardContent className="space-y-3">
               <button 
+                onClick={handleScheduleNewJob}
                 className="w-full p-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2"
                 data-testid="new-job-button"
               >
@@ -415,6 +417,7 @@ const Dashboard = () => {
               {user.role === 'admin' && (
                 <>
                   <button 
+                    onClick={handleAddClient}
                     className="w-full p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"
                     data-testid="add-client-button"
                   >
@@ -423,6 +426,7 @@ const Dashboard = () => {
                   </button>
                   
                   <button 
+                    onClick={handleViewReports}
                     className="w-full p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
                     data-testid="view-reports-button"
                   >
