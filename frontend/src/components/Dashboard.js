@@ -110,6 +110,19 @@ const Dashboard = () => {
   // Jobs da data selecionada
   const selectedDateJobs = getJobsForDate(selectedDate);
 
+  // Funções para Quick Actions
+  const handleScheduleNewJob = () => {
+    navigate('/schedule');
+  };
+
+  const handleAddClient = () => {
+    navigate('/clients');
+  };
+
+  const handleViewReports = () => {
+    navigate('/reports');
+  };
+
   if (loading) {
     return (
       <div className="p-8">
