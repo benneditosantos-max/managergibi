@@ -400,9 +400,9 @@ const Schedule = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Schedule Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Agendamentos</h1>
           <p className="text-gray-600 mt-1">
-            {user.role === 'admin' ? 'Manage all cleaning jobs and assignments' : 'View your assigned cleaning jobs'}
+            Gerencie todos os agendamentos de limpeza
           </p>
         </div>
         
@@ -415,7 +415,7 @@ const Schedule = () => {
                 data-testid="add-job-button"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Add Job
+                Novo
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
